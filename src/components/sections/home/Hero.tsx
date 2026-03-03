@@ -49,7 +49,7 @@ const Hero = () => {
             iconCustom={GithubIcon}
             size="sm"
             color={`${isDarkMode ? "white" : "black"}`}
-            onClick={() => handleSocialClick("https://github.com/vi0letmist")}
+            onClick={() => handleSocialClick("https://github.com/jaffarjjati")}
           />
           <Social
             iconCustom={InstagramIcon}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/main/navbar";
 import Switch from "@/components/common/switch";
 import { Bars3BottomLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -19,42 +20,74 @@ const Header = () => {
   }, [isMobile]);
 
   return (
-    <header className="py-4 px-8 md:px-16">
+    <motion.header
+      className="py-4 px-8 md:px-16"
+      initial={{ y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 80, damping: 14, delay: 0.1 }}
+    >
       {isMobile ? (
         <div className="relative flex items-center justify-between">
-          <Bars3BottomLeftIcon
-            className="h-6 w-6 cursor-pointer"
-            onClick={toggleNavbar}
-          />
+          <motion.div whileTap={{ scale: 0.85 }}>
+            <Bars3BottomLeftIcon
+              className="h-6 w-6 cursor-pointer"
+              onClick={toggleNavbar}
+            />
+          </motion.div>
           <span className="animate-pulse text-2xl">12:51</span>
           <Switch size="small" />
-          <div
-            className={`fixed inset-0 bg-white shadow-lg z-50 transition-transform transform ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"} ease-in-out duration-300`}
-          >
-            <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h2 className="text-lg font-medium">Menu</h2>
-              <XMarkIcon
-                className="h-6 w-6 cursor-pointer"
-                onClick={toggleNavbar}
-              />
-            </div>
-            <Navbar />
-          </div>
+          <AnimatePresence>
+            {isNavbarOpen && (
+              <motion.div
+                className="fixed inset-0 bg-white shadow-lg z-50"
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="flex justify-between items-center p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium">Menu</h2>
+                  <motion.div whileTap={{ rotate: 90, scale: 0.8 }}>
+                    <XMarkIcon
+                      className="h-6 w-6 cursor-pointer"
+                      onClick={toggleNavbar}
+                    />
+                  </motion.div>
+                </div>
+                <Navbar />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       ) : (
         <div className="grid grid-cols-12 items-center gap-4">
-          <div className="col-span-2">
+          <motion.div
+            className="col-span-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             <span className="animate-pulse text-2xl">12:51</span>
-          </div>
-          <div className="col-span-8 flex justify-center">
+          </motion.div>
+          <motion.div
+            className="col-span-8 flex justify-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+          >
             <Navbar />
-          </div>
-          <div className="col-span-2 flex justify-end">
+          </motion.div>
+          <motion.div
+            className="col-span-2 flex justify-end"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
             <Switch size="small" />
-          </div>
+          </motion.div>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 };
 
